@@ -4,6 +4,7 @@ import Link from "next/link";
 import { buttonVariants } from '@/components/ui/button';
 import { adminGetCourses } from '../../data/admin/admin-get-courses';
 import { AdminCourseCard } from './_components/AdminCourseCard';
+import EmptyState from '@/components/general/EmptyState';
 
  const CoursesPage = async () => {
 
@@ -24,13 +25,22 @@ import { AdminCourseCard } from './_components/AdminCourseCard';
             <h1>Here you will see all the courses.</h1>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-7">
-            {
-                data.map((course)=>(
-                    <AdminCourseCard key={course.id} data={course}/>
-                ))
-            }
-        </div>
+        {
+            data.length === 0 ?(
+                <EmptyState href="/admin/courses/create" title="No courses found" buttonText='Create Course' description="Create a new course to get started" />
+            )
+            :
+            (
+                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-7">
+                    {
+                        data.map((course)=>(
+                            <AdminCourseCard key={course.id} data={course}/>
+                        ))
+                    }
+                 </div>
+            )
+        }
+       
         </>
     )
 }

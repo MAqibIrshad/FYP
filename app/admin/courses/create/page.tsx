@@ -20,11 +20,13 @@ import { CreateCourse } from './actions';
 import { tryCatch } from '@/hooks/try-catch';
 import { toast } from 'sonner';
 import {useRouter} from "next/navigation";
+import { useConfetti } from '@/hooks/use-confetti';
 
 const CreateCoursePage = () => {
     const [isMounted, setIsMounted] = useState(false);
     const [pending, startTransition] = useTransition();
     const router = useRouter();
+    const {triggerConfetti} = useConfetti();
 
     const form = useForm<CourseSchemaType>({
         resolver: zodResolver(courseSchema) as Resolver<CourseSchemaType>,
@@ -70,8 +72,10 @@ function onSubmit(data: z.infer<typeof courseSchema>) {
                     
                                 if(result.status === "success"){
                                     toast.success(result.message)
+                                     triggerConfetti();
                                     form.reset();
                                     router.push("/admin/courses")
+                                   
                                 }
                                 else if(result.status === "error"){
                                     toast.error(result.message);
